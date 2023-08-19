@@ -1,0 +1,94 @@
+[tool.poetry]
+name = "discordexport"
+version = "0.1.0"
+description = "Export Discord messages to multiple formats"
+authors = ["Sebastien Waegeneire <sebastien@waegeneire.com>"]
+readme = "README.md"
+
+[tool.poetry.scripts]
+discordexport = "discordexport:main"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+typer = "^0.9.0"
+rich = "^13.5.2"
+shellingham = "^1.5.3"
+plyvel = "^1.5.0"
+simple-term-menu = "^1.6.1"
+requests = "^2.31.0"
+
+[tool.poetry.group.test.dependencies]
+pytest = "^7.4.0"
+
+[tool.poetry.group.dev.dependencies]
+nox = "^2023.4.22"
+black = "^23.7.0"
+ruff = "^0.0.285"
+mypy = "^1.5.1"
+types-requests = "^2.31.0.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.mypy]
+strict = true
+
+[tool.black]
+line-length = 88
+
+[tool.ruff]
+select = [
+  "F",
+  "E",
+  "W",
+  "C90",
+  "I",
+  "N",
+  "UP",
+  "YTT",
+  "ANN",
+  "ASYNC",
+  "S",
+  "BLE",
+  "B",
+  "A",
+  "COM",
+  "CPY",
+  "C4",
+  "DTZ",
+  "T10",
+  "EM",
+  "EXE",
+  "ISC",
+  "ICN",
+  "G",
+  "INP",
+  "PIE",
+  "PYI",
+  "PT",
+  "Q",
+  "RSE",
+  "RET",
+  "SLF",
+  "SLOT",
+  "SIM",
+  "TID",
+  "TCH",
+  "INT",
+  "ARG",
+  "PTH",
+  "TD",
+  "FIX",
+  "ERA",
+  "PD",
+  "PGH",
+  "PL",
+  "TRY",
+  "FLY",
+  "PERF",
+  "RUF",
+]
+ignore = ["G004"]
+unfixable = ["F841", "ERA001"]
+line-length = 88
