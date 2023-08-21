@@ -8,8 +8,6 @@ import plyvel  # type: ignore[import]
 
 from .utils import UnsupportedSystemError
 
-log = logging.getLogger("rich")
-
 
 class Account(NamedTuple):
     email: str
@@ -18,6 +16,7 @@ class Account(NamedTuple):
 
 
 class AccountFinder:
+    _log = logging.getLogger("rich")
     _OS: Literal["linux"]
     _accounts: ClassVar[set[Account]] = set()
 
@@ -63,7 +62,7 @@ class AccountFinder:
                     self._accounts.add(Account(email, token, "Firefox"))
 
     def _find_accounts_chromium(self: Self) -> None:
-        log.info("Searching for accounts in Chromium")
+        self._log.info("Searching for accounts in Chromium")
         profiles_dir: Path
         match self._OS:
             case "linux":
@@ -102,6 +101,6 @@ class AccountFinder:
                     ),
                 )
         except OSError:
-            log.warning(f"{source}, is running. Please close it and try again.")
+            self._log.warning(f"{source}, is running. Please close it and try again.")
         except plyvel.Error:
-            log.warning(f"Error while reading {source} database.")
+            self._log.warning(f"Error while reading {source} database.")
