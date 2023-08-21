@@ -78,8 +78,6 @@ select = [
   "INT",
   "ARG",
   "PTH",
-  "TD",
-  "FIX",
   "ERA",
   "PD",
   "PGH",
@@ -89,6 +87,6 @@ select = [
   "PERF",
   "RUF",
 ]
-ignore = ["G004"]
+ignore = ["G004", "PLR2004", "DTZ005", "PLR0913"]
 unfixable = ["F841", "ERA001"]
 line-length = 88
