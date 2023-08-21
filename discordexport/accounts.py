@@ -34,32 +34,37 @@ class AccountFinder:
         return list(self._accounts)
 
     def _find_accounts_firefox(self: Self) -> None:
-        log.info("Searching for accounts in Firefox")
-        profiles_dir: Path
-        match self._OS:
-            case "linux":
-                profiles_dir = Path("~/.mozilla/firefox").expanduser()
-            case _:
-                assert_never(self.OS)
+        try:
+            self._log.info("Searching for accounts in Firefox")
+            profiles_dir: Path
+            match self._OS:
+                case "linux":
+                    profiles_dir = Path("~/.mozilla/firefox").expanduser()
+                case _:
+                    assert_never(self.OS)
 
-        dbs = profiles_dir.glob("*/storage/default/https+++discord.com/ls/data.sqlite")
-        for db in dbs:
-            con = sqlite3.connect(db)
-            cur = con.cursor()
-            query = cur.execute(
-                "SELECT key, value FROM data WHERE key='email_cache' OR key='token'",
+            dbs = profiles_dir.glob(
+                "*/storage/default/https+++discord.com/ls/data.sqlite",
             )
-            res = query.fetchall()
-            email = ""
-            token = ""
-            if len(res) == 2:  # noqa: PLR2004
-                for key, value in res:
-                    if key == "email_cache":
-                        email = value.decode("utf-8")[1:-1]
-                    elif key == "token":
-                        token = value.decode("utf-8")[1:-1]
-                if len(email) > 0 and len(token) > 0:
-                    self._accounts.add(Account(email, token, "Firefox"))
+            for db in dbs:
+                con = sqlite3.connect(db)
+                cur = con.cursor()
+                query = cur.execute(
+                    "SELECT key, value FROM data WHERE key='email_cache' OR key='token'",
+                )
+                res = query.fetchall()
+                email = ""
+                token = ""
+                if len(res) == 2:
+                    for key, value in res:
+                        if key == "email_cache":
+                            email = value.decode("utf-8")[1:-1]
+                        elif key == "token":
+                            token = value.decode("utf-8")[1:-1]
+                    if len(email) > 0 and len(token) > 0:
+                        self._accounts.add(Account(email, token, "Firefox"))
+        except OSError:
+            self._log.warning("Firefox, is running. Please close it and try again.")
 
     def _find_accounts_chromium(self: Self) -> None:
         self._log.info("Searching for accounts in Chromium")
